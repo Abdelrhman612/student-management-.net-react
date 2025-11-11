@@ -1,25 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using student_management.data.Models;
 using student_management.Dto;
 using student_management.InterFaces;
-using student_management.Services;
 
 namespace student_management.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize] // require authentication for all endpoints
     public class StudentsController : ControllerBase
     {
         private readonly IStudentService _studentService;
+
         public StudentsController(IStudentService studentService)
         {
             _studentService = studentService;
         }
 
+        // Accessible to all authenticated users
         [HttpGet]
         public async Task<IActionResult> GetStudents()
         {
@@ -27,41 +26,46 @@ namespace student_management.Controllers
             return Ok(new { count = students.Count(), data = students });
         }
 
-        [HttpGet("id")]
-        public async Task<IActionResult> GetStudent(int Id)
+        // Allow only Staff and SystemUser roles
+        [HttpGet("{id}")]
+        [Authorize(Roles = $"{nameof(Roles.Staff)},{nameof(Roles.SystemUser)}")]
+        public async Task<IActionResult> GetStudent(int id)
         {
-            var student = await _studentService.GetStudent(Id);
+            var student = await _studentService.GetStudent(id);
             if (student == null)
-            {
-                return NotFound("student is not found");
-            }
+                return NotFound("Student not found");
+
             return Ok(student);
         }
 
+        // Only Staff can create
         [HttpPost]
+        [Authorize(Roles = nameof(Roles.Staff))]
         public async Task<IActionResult> CreateStudent([FromBody] CreateStudentDto createStudentDto)
         {
             var student = await _studentService.CreateStudent(createStudentDto);
             return Ok(student);
         }
 
-        [HttpPatch("id")]
-        public async Task<IActionResult> UpdateStudent([FromBody] UpdateStudentDto updateStudentDto, int Id)
+        // Only Staff or SystemUser can update
+        [HttpPatch("{id}")]
+        [Authorize(Roles = $"{nameof(Roles.Staff)},{nameof(Roles.SystemUser)}")]
+        public async Task<IActionResult> UpdateStudent([FromBody] UpdateStudentDto updateStudentDto, int id)
         {
-            var student = await _studentService.UpdateStudent(updateStudentDto, Id);
+            var student = await _studentService.UpdateStudent(updateStudentDto, id);
             return Ok(student);
         }
 
-        [HttpDelete("id")]
-        public async Task<IActionResult> DeleteStudent(int Id)
+        //  Only SystemUser can delete
+        [HttpDelete("{id}")]
+        [Authorize(Roles = nameof(Roles.SystemUser))]
+        public async Task<IActionResult> DeleteStudent(int id)
         {
-            var student = await _studentService.DeleteStudent(Id);
+            var student = await _studentService.DeleteStudent(id);
             if (student == null)
-            {
-                return NotFound("student is not found");
-            }
-            return Ok(new { message = "Deleted Successfully" });
-        }
+                return NotFound("Student not found");
 
+            return Ok(new { message = "Deleted successfully" });
+        }
     }
 }
