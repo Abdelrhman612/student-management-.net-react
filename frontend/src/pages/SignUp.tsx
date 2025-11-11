@@ -45,6 +45,7 @@ const SignUp: React.FC = () => {
     
     try {
       SignUp({name, email, password});
+      alert("User Is Signed Up ✔✔✔");
       navigate('/signin')
     } catch (err: any) {
       setError(err.response?.data?.message || 'فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.')
