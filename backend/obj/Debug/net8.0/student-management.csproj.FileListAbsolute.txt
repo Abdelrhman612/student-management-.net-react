@@ -288,3 +288,4 @@ D:\Projects\student-management\backend\obj\Debug\net8.0\refint\student-managemen
 D:\Projects\student-management\backend\obj\Debug\net8.0\student-management.pdb
 D:\Projects\student-management\backend\obj\Debug\net8.0\student-management.genruntimeconfig.cache
 D:\Projects\student-management\backend\obj\Debug\net8.0\ref\student-management.dll
+D:\Projects\student-management\backend\bin\Debug\net8.0\BCrypt.Net-Next.dll

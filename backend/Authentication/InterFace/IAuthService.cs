@@ -8,7 +8,7 @@ namespace student_management.Authentication.InterFace
 {
     public interface IAuthService
     {
-        Task<SignUpDto> SignUp(SignUpDto signUpDto);
+        Task<AuthResSginUpDto> SignUp(SignUpDto signUpDto);
         Task<AuthResSginInDto> SignIn(SignInDto signUpDto);
     }
 }
