@@ -54,7 +54,6 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="landing-page">
-      {/* Navbar محسنة */}
       <Navbar bg="white" variant="light" expand="lg" className="shadow-sm py-3" fixed="top">
         <Container>
           <Navbar.Brand href="#" className="fw-bold text-primary d-flex align-items-center">
@@ -88,7 +87,6 @@ const LandingPage: React.FC = () => {
         </Container>
       </Navbar>
 
-      {/* Hero Section محسنة */}
       <section className="hero-section bg-gradient-primary text-white" style={{ paddingTop: '100px', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
         <Container>
           <Row className="align-items-center">
@@ -187,7 +185,6 @@ const LandingPage: React.FC = () => {
         </Container>
       </section>
 
-      {/* Features Section */}
       <section id="features" className="py-5 bg-light">
         <Container>
           <Row className="text-center mb-5">
@@ -214,7 +211,7 @@ const LandingPage: React.FC = () => {
         </Container>
       </section>
 
-      {/* Testimonials Section */}
+
       <section id="testimonials" className="py-5">
         <Container>
           <Row className="text-center mb-5">
@@ -250,7 +247,7 @@ const LandingPage: React.FC = () => {
         </Container>
       </section>
 
-      {/* CTA Section */}
+  
       <section className="py-5 bg-primary text-white">
         <Container>
           <Row className="text-center">

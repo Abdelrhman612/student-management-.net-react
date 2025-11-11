@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Card, Form, Button, Alert, Spinner, Container, Row, Col } from 'react-bootstrap'
-import axios from 'axios'
 import { useNavigate, Link } from 'react-router-dom'
 import { Eye, EyeSlash, PersonCircle } from 'react-bootstrap-icons'
 
@@ -20,13 +19,7 @@ const SignIn: React.FC = () => {
     setError('')
     
     try {
-      const res = await axios.post('https://localhost:5008/api/Auth/signIn', { 
-        email, 
-        password,
-        role 
-      })
-      localStorage.setItem('token', res.data.token)
-      localStorage.setItem('userRole', role)
+      SignIn({email, password, role});
       navigate('/')
     } catch (err: any) {
       setError(err.response?.data?.message || 'فشل تسجيل الدخول. يرجى التحقق من بياناتك والمحاولة مرة أخرى.')

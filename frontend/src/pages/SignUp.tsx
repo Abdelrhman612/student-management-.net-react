@@ -44,11 +44,7 @@ const SignUp: React.FC = () => {
     setIsLoading(true)
     
     try {
-      await axios.post('https://localhost:5008/api/Auth/signUp', { 
-        name, 
-        email, 
-        password 
-      })
+      SignUp({name, email, password});
       navigate('/signin')
     } catch (err: any) {
       setError(err.response?.data?.message || 'فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.')
