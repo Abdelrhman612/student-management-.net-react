@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { Card, Form, Button, Alert, Spinner, Container, Row, Col } from 'react-bootstrap'
 import { useNavigate, Link } from 'react-router-dom'
 import { Eye, EyeSlash, PersonCircle } from 'react-bootstrap-icons'
+import { SignInService } from '../Service/EndPoint/Auth.EndPoint'
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string>('')
-  const [role, setRole] = useState('Student')
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   
@@ -19,7 +19,7 @@ const SignIn: React.FC = () => {
     setError('')
     
     try {
-      SignIn({email, password, role});
+       SignInService({email, password});
       alert("✅ تم تسجيل الدخول بنجاح");
       navigate('/')
     } catch (err: any) {
@@ -86,20 +86,7 @@ const SignIn: React.FC = () => {
                     </Button>
                   </div>
                 </Form.Group>
-                
-                <Form.Group className="mb-4">
-                  <Form.Label className="fw-medium">الدور</Form.Label>
-                  <Form.Select 
-                    name="role" 
-                    value={role} 
-                    onChange={(e) => setRole(e.target.value)}
-                    className="py-2"
-                  >
-                    <option value="Student">طالب</option>
-                    <option value="Staff">موظف</option>
-                    <option value="SystemUser">مستخدم نظام</option>
-                  </Form.Select>
-                </Form.Group>
+              
                 
                 <Button 
                   type="submit" 

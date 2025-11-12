@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Card, Form, Button, Alert, Spinner, Container, Row, Col } from 'react-bootstrap'
 import { useNavigate, Link } from 'react-router-dom'
 import { PersonPlus, Eye, EyeSlash, Person } from 'react-bootstrap-icons'
+import { SignUpService } from '../Service/EndPoint/Auth.EndPoint'
 
 const SignUp: React.FC = () => {
   const [name, setName] = useState('')
@@ -43,7 +44,8 @@ const SignUp: React.FC = () => {
     setIsLoading(true)
     
     try {
-      SignUp({name, email, password});
+        SignUpService({name, email, password});
+    
      alert("✅ تم إنشاء الحساب بنجاح");
       navigate('/signin')
     } catch (err: any) {
