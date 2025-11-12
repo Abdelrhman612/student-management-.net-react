@@ -6,27 +6,47 @@ using student_management.data;
 using student_management.Authentication;
 using student_management.Authentication.InterFace;
 using student_management.Authentication.Service;
-using student_management.Utils;
 using student_management.InterFaces;
 using student_management.Services;
+using student_management.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add DbContext
+// ----------------------------
+// 1️⃣ Configure Database
+// ----------------------------
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("myCon")));
 
-// Configure JWT options
+// ----------------------------
+// 2️⃣ Configure CORS
+// ----------------------------
+var allowedOrigins = builder.Configuration.GetSection("allowedOrigins").Get<string[]>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactPolicy", policy =>
+    {
+        policy
+            .WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // optional if you use cookies
+    });
+});
+
+// ----------------------------
+// 3️⃣ Configure JWT
+// ----------------------------
 var jwtOptions = builder.Configuration.GetSection("JWT").Get<Jwt>();
 builder.Services.AddSingleton(jwtOptions);
-
-// Register TokenService with Jwt injection
 builder.Services.AddSingleton<ITokenService>(provider => new TokenService(jwtOptions));
-// Register AuthService and other services
+
+// ----------------------------
+// 4️⃣ Register Services
+// ----------------------------
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 
-// Configure JWT authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -42,13 +62,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Controllers & Swagger
+// ----------------------------
+// 5️⃣ Controllers & Swagger
+// ----------------------------
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// ----------------------------
+// 6️⃣ Middleware Order
+// ----------------------------
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -56,7 +81,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("ReactPolicy");       
+   
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+
 app.Run();
