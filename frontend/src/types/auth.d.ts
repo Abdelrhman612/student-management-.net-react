@@ -8,6 +8,6 @@ export interface SignUpDto {
 export interface SignInDto {
   email: string
   password: string
-   role: 'Student' | 'Staff' | 'SystemUser'
+  
 }
 
