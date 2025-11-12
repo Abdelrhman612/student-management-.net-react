@@ -24,22 +24,27 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var allowedOrigins = builder.Configuration.GetSection("allowedOrigins").Get<string[]>();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("ReactPolicy", policy =>
+    if (allowedOrigins != null && allowedOrigins.Length > 0)
     {
-        policy
-            .WithOrigins(allowedOrigins)
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials(); // optional if you use cookies
-    });
+        options.AddPolicy("ReactPolicy", policy =>
+        {
+            policy
+                .WithOrigins(allowedOrigins)
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    }
 });
 
 // ----------------------------
 // 3️⃣ Configure JWT
 // ----------------------------
 var jwtOptions = builder.Configuration.GetSection("JWT").Get<Jwt>();
-builder.Services.AddSingleton(jwtOptions);
-builder.Services.AddSingleton<ITokenService>(provider => new TokenService(jwtOptions));
+if (jwtOptions != null)
+{
+    builder.Services.AddSingleton(jwtOptions);
+    builder.Services.AddSingleton<ITokenService>(provider => new TokenService(jwtOptions));
+}
 
 // ----------------------------
 // 4️⃣ Register Services
@@ -54,11 +59,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = jwtOptions.Issuer,
+            ValidIssuer = jwtOptions?.Issuer,
             ValidateAudience = true,
-            ValidAudience = jwtOptions.Audience,
+            ValidAudience = jwtOptions?.Audience,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.key))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions?.key ?? "fallback_key"))
         };
     });
 
@@ -82,8 +87,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("ReactPolicy");       
-   
+// CORS قبل authentication & authorization
+app.UseCors("ReactPolicy");
+
 app.UseAuthentication();
 app.UseAuthorization();
 

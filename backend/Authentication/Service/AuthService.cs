@@ -1,5 +1,4 @@
-using System;
-using System.Threading.Tasks;
+
 using Microsoft.EntityFrameworkCore;
 using student_management.Authentication.Dto;
 using student_management.Authentication.InterFace;
@@ -47,11 +46,23 @@ namespace student_management.Authentication.Service
 
         public async Task<AuthResSginInDto> SignIn(SignInDto dto)
         {
-            var user = await _db.Users.FirstOrDefaultAsync(u =>
-                u.Email == dto.Email && u.Password == dto.Password);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
 
             if (user == null)
+            {
                 throw new Exception("Invalid credentials");
+            }
+
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.Password);
+            if (!isPasswordValid)
+            {
+                throw new Exception("Invalid credentials");
+            }
+
+            if (user == null)
+            {
+                throw new Exception("Invalid credentials");
+            }
 
             var token = _tokenService.GenerateToken(user);
 
