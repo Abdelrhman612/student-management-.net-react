@@ -10,7 +10,7 @@ export const SignUpService = async ({name, email, password} : SignUpDto)=>{
 
 export const  SignInService = async ({email, password} : SignInDto )=>{
   const res = await axios.post(SignInUrl, { email, password })
-  const token = res.data.Token;
+  const token = res.data.token;
   localStorage.setItem('token', token);
-  return {token };
+  return token ;
 }

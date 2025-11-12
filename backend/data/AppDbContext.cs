@@ -19,7 +19,8 @@ namespace student_management.data
 
             modelBuilder.Entity<Student>()
                 .Property(s => s.Role)
-                .HasDefaultValue("student");
+                .HasDefaultValue("Student");
+                modelBuilder.Entity<User>().Property(u => u.Role).HasDefaultValue(Roles.SystemUser);
         }
 
         public DbSet<Student> Students { get; set; }

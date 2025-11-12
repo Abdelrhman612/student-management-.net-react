@@ -4,3 +4,4 @@
 export const SignUpUrl = `${apiService}/api/Auth/signUp`;
 export const SignInUrl = `${apiService}/api/Auth/signIn`;
 
+export const StudentUrl = `${apiService}/api/Students`;

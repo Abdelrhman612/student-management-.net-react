@@ -66,6 +66,7 @@ const LandingPage: React.FC = () => {
               <Nav.Link href="#features">المميزات</Nav.Link>
               <Nav.Link href="#testimonials">آراء العملاء</Nav.Link>
               <Nav.Link href="#pricing">الأسعار</Nav.Link>
+              <Nav.Link href="/Student"> قائمة الطلاب</Nav.Link>
             </Nav>
             <Nav>
               <Button 

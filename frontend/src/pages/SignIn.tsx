@@ -21,7 +21,7 @@ const SignIn: React.FC = () => {
     try {
        SignInService({email, password});
       alert("✅ تم تسجيل الدخول بنجاح");
-      navigate('/')
+      navigate('/Student')
     } catch (err: any) {
       setError(err.response?.data?.message || 'فشل تسجيل الدخول. يرجى التحقق من بياناتك والمحاولة مرة أخرى.')
     } finally {

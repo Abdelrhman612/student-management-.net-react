@@ -53,7 +53,7 @@ namespace student_management.Migrations
                     b.Property<string>("Role")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("student");
+                        .HasDefaultValue("Student");
 
                     b.HasKey("Id");
 
@@ -81,7 +81,9 @@ namespace student_management.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Role")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(2);
 
                     b.HasKey("Id");
 
