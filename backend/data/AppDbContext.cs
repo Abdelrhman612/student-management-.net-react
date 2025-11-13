@@ -17,13 +17,13 @@ namespace student_management.data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Student>()
+            modelBuilder.Entity<Students>()
                 .Property(s => s.Role)
                 .HasDefaultValue("Student");
                 modelBuilder.Entity<User>().Property(u => u.Role).HasDefaultValue(Roles.SystemUser);
         }
 
-        public DbSet<Student> Students { get; set; }
+        public DbSet<Students> Students { get; set; }
         public DbSet<User> Users { get; set; }
     }
 }
