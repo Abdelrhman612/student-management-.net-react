@@ -9,6 +9,7 @@ using student_management.Authentication.Service;
 using student_management.InterFaces;
 using student_management.Services;
 using student_management.Utils;
+using student_management.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,7 @@ if (jwtOptions != null)
 // ----------------------------
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
