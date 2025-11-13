@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace student_management.data.Models
 {
-    public class Student
+    public class Students
     {
         public int Id { get; set; }
         public required string Name { get; set; }
