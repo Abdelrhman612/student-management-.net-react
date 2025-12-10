@@ -89,7 +89,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// CORS قبل authentication & authorization
+
 app.UseCors("ReactPolicy");
 
 app.UseAuthentication();
