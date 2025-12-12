@@ -8,7 +8,6 @@ namespace student_management.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] // require authentication for all endpoints
     public class StudentsController : ControllerBase
     {
         private readonly IStudentService _studentService;

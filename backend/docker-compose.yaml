@@ -1,0 +1,23 @@
+
+services:
+  sql-student-api:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Abc12345!"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+    container_name: sql-student-api
+
+  student-api:
+    image: abdelrhman612/student-api
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8080"
+    depends_on:
+      - sql-student-api
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=sql-student-api;Database=student;User Id=sa;Password=Abc12345!;TrustServerCertificate=True;"
