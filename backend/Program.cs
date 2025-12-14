@@ -13,15 +13,11 @@ using student_management.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ----------------------------
-// 1️⃣ Configure Database
-// ----------------------------
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ----------------------------
-// 2️⃣ Configure CORS
-// ----------------------------
+
 var allowedOrigins = builder.Configuration.GetSection("allowedOrigins").Get<string[]>();
 builder.Services.AddCors(options =>
 {
@@ -37,9 +33,7 @@ builder.Services.AddCors(options =>
     }
 });
 
-// ----------------------------
-// 3️⃣ Configure JWT
-// ----------------------------
+
 var jwtOptions = builder.Configuration.GetSection("JWT").Get<Jwt>();
 if (jwtOptions != null)
 {
@@ -47,9 +41,7 @@ if (jwtOptions != null)
     builder.Services.AddSingleton<ITokenService>(provider => new TokenService(jwtOptions));
 }
 
-// ----------------------------
-// 4️⃣ Register Services
-// ----------------------------
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
@@ -69,18 +61,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// ----------------------------
-// 5️⃣ Controllers & Swagger
-// ----------------------------
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// ----------------------------
-// 6️⃣ Middleware Order
-// ----------------------------
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
+    
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -94,7 +88,7 @@ app.UseCors("ReactPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapGet("/", () => "Student Management API is running...");
 app.MapControllers();
 
 app.Run();
